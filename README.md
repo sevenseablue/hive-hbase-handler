@@ -17,7 +17,7 @@ handler不使用hbase的读写api,只使用snapshot和bulkload的api,对hbase系
 - 读部分行到hive表, 按rowkey的条件
 - 写, rowkey唯一且不空, 按顺序写
 
-####1 create table
+#### 1 create table
 ```hiveql
 CREATE TABLE t1g_hb(col0 string, 
                     col1 string, 
@@ -43,7 +43,7 @@ TBLPROPERTIES("hbase.table.name" = "data:t1g_hb","hbase.table.family.name"="f", 
 | hbase.mapred.output.outputtable | data:t1g_hb |  |
 |  |  |  |
 
-####2 insert, 一般数据量小, 小于3g, hbase表可以只有一个region
+#### 2 insert, 一般数据量小, 小于3g, hbase表可以只有一个region
 ```hiveql
 insert into t1g_hb select * from t1g where col0 is not null and col0 != '' cluster by col0;
 ```
@@ -51,12 +51,12 @@ insert into t1g_hb select * from t1g where col0 is not null and col0 != '' clust
 - rowkey字段不能为NULL|null或者空, 需要过滤, key is not null and key != ''
 - rowkey字段有序且不能有重复, 使用 cluster by rowkey
 
-####3 insert, 数据量大, 几十g,百g,几t等, hbase表需要有多个eregion
+#### 3 insert, 数据量大, 几十g,百g,几t等, hbase表需要有多个eregion
 ```hiveql
 insert into t100g_hb select * from t100g cluster by col0;
 ```
 
-####4 read, read all, read by key range, read by part of columns
+#### 4 read, read all, read by key range, read by part of columns
 ```hiveql
 insert into t100g_hb_91_f select * from t100g_hb_91;
 insert into t100g_hb_91_f2 select col0, col1, col10, col20 from t100g_hb_91 where col0>='v1' and col0<'v2';
@@ -66,9 +66,9 @@ insert into t100g_hb_91_f2 select col0, col1, col10, col20 from t100g_hb_91 wher
 测试集群hadoop 31 datanode, hbase 7 regionserver, 400 vcores
 
 线上集群 900 vcores
-####功能测试
+#### 功能测试
 
-####性能测试写
+#### 性能测试写
 
 hive表为50个字段,分别是1-50的长度机英文数字字符, textfile存储
 
@@ -99,7 +99,7 @@ prod
 
 
 
-####性能测试读
+#### 性能测试读
 
 hbase表为50个字段,分别是1-50的长度机英文数字字符
 
